@@ -7,56 +7,58 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     @IBOutlet var redLightView: UIView!
     @IBOutlet var yellowLightView: UIView!
     @IBOutlet var greenLightView: UIView!
+    
     @IBOutlet var startButton: UIButton!
     
-    private enum TrafficLight {
-        case start
-        case red
-        case yellow
-        case green
-    }
+    private var lightColor: TrafficLight = .red
     
-    private var lightColor: TrafficLight = .start
+    private let lightIsOn = 1.0
+    private let lightIsOff = 0.1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         redLightView.layer.cornerRadius = redLightView.frame.width / 2
-        redLightView.alpha = 0.1
+        redLightView.alpha = lightIsOff
         
         yellowLightView.layer.cornerRadius = yellowLightView.frame.width / 2
-        yellowLightView.alpha = 0.1
+        yellowLightView.alpha = lightIsOff
         
         greenLightView.layer.cornerRadius = greenLightView.frame.width / 2
-        greenLightView.alpha = 0.1
+        greenLightView.alpha = lightIsOff
         
         startButton.layer.cornerRadius = 10
     }
 
     @IBAction func startButtonDidTapped() {
-        startButton.setTitle("NEXT", for: .normal)
+        if startButton.currentTitle == "START" {
+            startButton.setTitle("NEXT", for: .normal)
+        }
         
         switch lightColor {
-        case .start:
-            redLightView.alpha = 1
-            lightColor = .red
         case .red:
-            redLightView.alpha = 0.1
-            yellowLightView.alpha = 1
+            redLightView.alpha = lightIsOn
+            greenLightView.alpha = lightIsOff
             lightColor = .yellow
         case .yellow:
-            yellowLightView.alpha = 0.1
-            greenLightView.alpha = 1
+            yellowLightView.alpha = lightIsOn
+            redLightView.alpha = lightIsOff
             lightColor = .green
         case .green:
-            greenLightView.alpha = 0.1
-            redLightView.alpha = 1
+            greenLightView.alpha = lightIsOn
+            yellowLightView.alpha = lightIsOff
             lightColor = .red
         }
     }
     
 }
 
+// MARK: - CurrentLight
+extension ViewController {
+    private enum TrafficLight {
+        case red, yellow, green
+    }
+}
